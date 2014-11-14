@@ -1,0 +1,4 @@
+1.target server需要修改为mysql
+2.FOREIGN_KEY_CHECKS需要修改关键字
+3.表名称修改，“”修改为`号
+4.创建表语句中类似[id]需要修改为`id`的形式
