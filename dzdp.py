@@ -92,6 +92,7 @@ def process(item):
                 utags = q('.item').text().replace(' (', '(')
     except AttributeError:
         utags = '-1'
+    print 'item %s dealed' % shopname
     return (shopname,grade,comment,avg,kouwei,huanjing,fuwu,tags,address,phone,yytime,utags)
 
 
