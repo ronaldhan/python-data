@@ -52,8 +52,7 @@ def process(item):
         fuwu = '-1'
     try:
         tagaddr = item('.tag-addr')
-        tagslist = pq(tagaddr)('.tag').text()
-        tags = ','.join(tagslist)
+        tags = pq(tagaddr)('.tag').text()
         address = '丰台区' + pq(tagaddr)('.addr').text()
     except AttributeError:
         tags = '-1'
