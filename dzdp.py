@@ -38,6 +38,9 @@ def process(item):
     try:
         slist = item('.comment-list b')
         if len(slist) == 0:
+            kouwei = ''
+            huanjing = ''
+            fuwu = ''
             pass
         else:
             kouwei = pq(slist[0]).text()
@@ -62,7 +65,11 @@ def process(item):
     itemhtml = pq(itempage)
     try:
         phoneinfo = itemhtml('span').filter(lambda i: pq(this).attr('itemprop') == 'tel')
-        phone = pq(phoneinfo).text()
+        if len(phoneinfo) == 0:
+            phone = ''
+            pass
+        else:
+            phone = pq(phoneinfo).text()
     except AttributeError:
         phone = '-1'
     try:
