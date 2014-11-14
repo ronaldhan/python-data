@@ -36,17 +36,13 @@ def process(item):
     except AttributeError:
         avg = '-1'
     try:
-        # clist = item('.comment-list')
         slist = item('.comment-list b')
-        print slist
-        kouwei = pq(slist[0]).text()
-        huanjing = pq(slist[1]).text()
-        fuwu = pq(slist[2]).text()
-        # ctext = pq(clist).text()
-        # cnum = re.findall(r'[\d|.]+', str(ctext))
-        # kouwei = cnum[0]
-        # huanjing = cnum[1]
-        # fuwu = cnum[2]
+        if len(slist) == 0:
+            pass
+        else:
+            kouwei = pq(slist[0]).text()
+            huanjing = pq(slist[1]).text()
+            fuwu = pq(slist[2]).text()
     except AttributeError:
         kouwei = '-1'
         huanjing = '-1'
@@ -64,11 +60,6 @@ def process(item):
     itemurl = webroot + href
     itempage = requests.get(itemurl).text
     itemhtml = pq(itempage)
-    # try:
-    #     addinfo = itemhtml('span').filter(lambda i: pq(this).attr('itemprop') == 'street-address')
-    #     address = pq(addinfo).text()
-    # except AttributeError:
-    #     address = '-1'
     try:
         phoneinfo = itemhtml('span').filter(lambda i: pq(this).attr('itemprop') == 'tel')
         phone = pq(phoneinfo).text()
