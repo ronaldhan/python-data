@@ -36,11 +36,12 @@ def process(item):
     except AttributeError:
         avg = '-1'
     try:
-        clist = item('.comment-list')
-        slist = pq(clist)('span')
-        kouwei = pq(pq(slist[0])('b')).text()
-        huanjing = pq(pq(slist[1])('b')).text()
-        fuwu = pq(pq(slist[2])('b')).text()
+        # clist = item('.comment-list')
+        slist = item('.comment-list b')
+        print slist
+        kouwei = pq(slist[0]).text()
+        huanjing = pq(slist[1]).text()
+        fuwu = pq(slist[2]).text()
         # ctext = pq(clist).text()
         # cnum = re.findall(r'[\d|.]+', str(ctext))
         # kouwei = cnum[0]
