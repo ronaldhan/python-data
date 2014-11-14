@@ -37,7 +37,6 @@ def process(item):
         avg = '-1'
     try:
         clist = item('.comment-list')
-        print len(clist)
         slist = pq(clist)('span')
         kouwei = pq(pq(slist[0])('b')).text()
         huanjing = pq(pq(slist[1])('b')).text()
@@ -144,7 +143,7 @@ if __name__ == '__main__':
             nUrl = nextUrl.replace('(*)', str(j))
             page = requests.get(nUrl).text
             nhtml = pq(page)
-            nitems = nhtml('.content ul li')
+            nitems = nhtml('.shop-list ul li')
             for nitem in nitems:
                 shopname, grade, comment, avg, kouwei, huanjing, fuwu, tags, address, phone, yytime, utags = process(nitem)
                 mysqlconn.insert(mysql_tablename,
