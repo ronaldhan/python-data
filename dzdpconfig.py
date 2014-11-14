@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 #存储不同类别第一页与其他页的url模板
-cFile = r'D:\data\dzdpconfig.txt'
+cFile = r'D:\github\python-data\dzdpconfig.txt'
 webroot = 'http://www.dianping.com'
 
 #mysql
