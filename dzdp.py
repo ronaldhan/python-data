@@ -103,11 +103,11 @@ if __name__ == '__main__':
     for i in range(group):
         #需要将行末的换行符去掉，最后一行单独处理
         if i < group - 1:
-            kword = lines[i][:-1]
+            kword = lines[3*i][:-1]
             firstUrl = lines[3*i + 1][:-1]
             nextUrl = lines[3*i + 2][:-1]
         else:
-            kword = lines[i][:-1]
+            kword = lines[3*i][:-1]
             firstUrl = lines[3*i + 1][:-1]
             nextUrl = lines[3*i + 2]
         firstPage = requests.get(firstUrl).text
