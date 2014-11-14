@@ -29,38 +29,47 @@ def process(item):
     except AttributeError:
         comment = '-1'
     try:
-        //comdetail = item('.comment')
-        avg = pq(comdetail)('.price').text()
+        avg = pq(remark)('.mean-price b').text()
         #可能没有价格信息
         if avg == u'-':
             avg = u'0'
     except AttributeError:
         avg = '-1'
     try:
-        clist = pq(comdetail)('.comment-list')
-        ctext = pq(clist).text()
-        cnum = re.findall(r'[\d|.]+', str(ctext))
-        kouwei = cnum[0]
-        huanjing = cnum[1]
-        fuwu = cnum[2]
+        clist = item('.comment-list')
+        print len(clist)
+        slist = pq(clist)('span')
+        kouwei = pq(pq(slist[0])('b')).text()
+        huanjing = pq(pq(slist[1])('b')).text()
+        fuwu = pq(pq(slist[2])('b')).text()
+        # ctext = pq(clist).text()
+        # cnum = re.findall(r'[\d|.]+', str(ctext))
+        # kouwei = cnum[0]
+        # huanjing = cnum[1]
+        # fuwu = cnum[2]
     except AttributeError:
         kouwei = '-1'
         huanjing = '-1'
         fuwu = '-1'
     try:
-        tags = item('.address a').text()
+        tagaddr = item('.tag-addr')
+        tagslist = pq(tagaddr)('.tag').text()
+        tags = ','.join(tagslist)
+        address = '丰台区' + pq(tagaddr)('.addr').text()
     except AttributeError:
         tags = '-1'
+        address = '-1'
     #详细页获取信息
-    href = item('.shopname').attr('href')
+    hrefitem = item('.tit a')[0]
+    href = pq(hrefitem).attr('href')
     itemurl = webroot + href
     itempage = requests.get(itemurl).text
     itemhtml = pq(itempage)
-    try:
-        addinfo = itemhtml('span').filter(lambda i: pq(this).attr('itemprop') == 'street-address')
-        address = pq(addinfo).text()
-    except AttributeError:
-        address = '-1'
+    # try:
+    #     addinfo = itemhtml('span').filter(lambda i: pq(this).attr('itemprop') == 'street-address')
+    #     address = pq(addinfo).text()
+    # except AttributeError:
+    #     address = '-1'
     try:
         phoneinfo = itemhtml('span').filter(lambda i: pq(this).attr('itemprop') == 'tel')
         phone = pq(phoneinfo).text()
@@ -109,7 +118,7 @@ if __name__ == '__main__':
         tpage = html('.page a')[-2]
         totalnum = pq(tpage).text()
         #获取所有的条目
-        items = html('.content ul li')
+        items = html('.shop-list ul li')
         for item in items:
             shopname, grade, comment, avg, kouwei, huanjing, fuwu, tags, address, phone, yytime, utags = process(item)
             mysqlconn.insert(mysql_tablename,
