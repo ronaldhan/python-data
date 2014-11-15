@@ -106,12 +106,25 @@ def getstate():
         return (sgroup,spage,stotal)
 
 
+def setstate(sgroup, spage, stotal):
+    #设置state文件，保存状态信息
+    content = open(sFile, 'r').read()
+    cjson = json.loads(content)
+    with open(sFile, 'w') as statefile:
+        cjson["i"] = sgroup
+        cjson["j"] = spage
+        cjson["total"] = stotal
+        sjson = json.dumps(cjson)
+        statefile.write(sjson)
+
+
 if __name__ == '__main__':
     mysqlconn = mydb.Connection(host=mysql_host, database=mysql_database, user=mysql_user, password=mysql_password)
     urlFile = open(cFile, 'r')
     lines = urlFile.readlines()
     group = len(lines)/3
-    for i in range(group):
+    sgroup, spage, stotal = getstate()
+    for i in range(sgroup, group):
         #需要将行末的换行符去掉，最后一行单独处理
         if i < group - 1:
             kword = lines[3*i][:-1]
