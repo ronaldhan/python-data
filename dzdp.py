@@ -2,9 +2,9 @@
 import requests
 import python_mysql as mydb
 from pyquery import PyQuery as pq
-import re
 from decimal import Decimal
 import time
+import json
 from dzdpconfig import *
 
 
@@ -94,7 +94,13 @@ def process(item):
     print 'item %s dealed' % shopname
     return (shopname,grade,comment,avg,kouwei,huanjing,fuwu,tags,address,phone,yytime,utags)
 
-def getstate()
+
+def getstate():
+    #读取state文件，返回状态信息
+    with open(sFile, 'r') as statefile:
+        content = statefile.read()
+        cjson = json.loads(content)
+
 
 if __name__ == '__main__':
     mysqlconn = mydb.Connection(host=mysql_host, database=mysql_database, user=mysql_user, password=mysql_password)
