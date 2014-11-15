@@ -100,6 +100,10 @@ def getstate():
     with open(sFile, 'r') as statefile:
         content = statefile.read()
         cjson = json.loads(content)
+        sgroup = cjson["i"]
+        spage = cjson["j"]
+        stotal = cjson["total"]
+        return (sgroup,spage,stotal)
 
 
 if __name__ == '__main__':
