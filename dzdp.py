@@ -106,7 +106,7 @@ def getstate():
         return (sgroup,spage,stotal)
 
 
-def setstate(sgroup, spage, stotal):
+def setstate(sgroup=0, spage=2, stotal=50):
     #设置state文件，保存状态信息
     content = open(sFile, 'r').read()
     cjson = json.loads(content)
@@ -134,7 +134,14 @@ if __name__ == '__main__':
             kword = lines[3*i][:-1]
             firstUrl = lines[3*i + 1][:-1]
             nextUrl = lines[3*i + 2]
-        firstPage = requests.get(firstUrl).text
+        #请求计数
+        tcount = 5
+        firstPage = ''
+        try:
+            firstPage = requests.get(firstUrl).text
+            tcount -= 1
+        except Exception,ex:
+
         html = pq(firstPage)
         #获取总计有多少页
         tpage = html('.page a')[-2]
