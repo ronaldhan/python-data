@@ -94,6 +94,7 @@ def process(item):
     print 'item %s dealed' % shopname
     return (shopname,grade,comment,avg,kouwei,huanjing,fuwu,tags,address,phone,yytime,utags)
 
+def getstate()
 
 if __name__ == '__main__':
     mysqlconn = mydb.Connection(host=mysql_host, database=mysql_database, user=mysql_user, password=mysql_password)
