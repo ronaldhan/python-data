@@ -102,18 +102,16 @@ def getstate():
         cjson = json.loads(content)
         sgroup = cjson["i"]
         spage = cjson["j"]
-        stotal = cjson["total"]
-        return (sgroup,spage,stotal)
+        return (sgroup,spage)
 
 
-def setstate(sgroup=0, spage=2, stotal=50):
+def setstate(sgroup=0, spage=2):
     #设置state文件，保存状态信息
     content = open(sFile, 'r').read()
     cjson = json.loads(content)
     with open(sFile, 'w') as statefile:
         cjson["i"] = sgroup
         cjson["j"] = spage
-        cjson["total"] = stotal
         sjson = json.dumps(cjson)
         statefile.write(sjson)
 
@@ -123,7 +121,7 @@ if __name__ == '__main__':
     urlFile = open(cFile, 'r')
     lines = urlFile.readlines()
     group = len(lines)/3
-    sgroup, spage, stotal = getstate()
+    sgroup, spage = getstate()
     for i in range(sgroup, group):
         #需要将行末的换行符去掉，最后一行单独处理
         if i < group - 1:
@@ -191,7 +189,7 @@ if __name__ == '__main__':
                 except Exception,ex:
                     print '网络连接遇到问题，状态参数已保存，下次从第%s类别：%s第%s页处执行' % (str(i), kword, str(j))
                 finally:
-                    setstate(i, j, total)
+                    setstate(i, j)
                     stime = 5*(6 - ncount)
                     ncount -= 1
                     print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - ncount))
