@@ -137,11 +137,13 @@ if __name__ == '__main__':
         #请求计数
         tcount = 5
         firstPage = ''
-        try:
-            firstPage = requests.get(firstUrl).text
-            tcount -= 1
-        except Exception,ex:
-
+        while tcount:
+            try:
+                firstPage = requests.get(firstUrl).text
+                tcount -= 1
+                break
+            except Exception,ex:
+                print
         html = pq(firstPage)
         #获取总计有多少页
         tpage = html('.page a')[-2]
