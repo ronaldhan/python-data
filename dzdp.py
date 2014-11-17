@@ -140,10 +140,12 @@ if __name__ == '__main__':
         while tcount:
             try:
                 firstPage = requests.get(firstUrl).text
-                tcount -= 1
                 break
             except Exception,ex:
-                print
+                setstate(i)
+                print '网络连接遇到问题，状态参数已保存，下次从断点处执行'
+            finally:
+                tcount -= 1
         html = pq(firstPage)
         #获取总计有多少页
         tpage = html('.page a')[-2]
