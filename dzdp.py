@@ -144,9 +144,9 @@ if __name__ == '__main__':
                     firstPage = fPage.text
                 break
             except Exception,ex:
-                setstate(i, 1)
                 print '网络连接遇到问题，状态参数已保存，下次从第%s类别：%s处执行' % (str(i), kword)
             finally:
+                setstate(i, 1)
                 stime = 5*(6 - tcount)
                 tcount -= 1
                 print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - tcount))
@@ -189,9 +189,9 @@ if __name__ == '__main__':
                         page = npage.text
                     break
                 except Exception,ex:
-                    setstate(i, j, total)
                     print '网络连接遇到问题，状态参数已保存，下次从第%s类别：%s第%s页处执行' % (str(i), kword, str(j))
                 finally:
+                    setstate(i, j, total)
                     stime = 5*(6 - ncount)
                     ncount -= 1
                     print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - ncount))
