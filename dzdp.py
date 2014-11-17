@@ -149,7 +149,7 @@ if __name__ == '__main__':
             finally:
                 stime = 5*(6 - tcount)
                 tcount -= 1
-                print '将等待%s秒，第%s次重试……' % (str(stime), str(tcount))
+                print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - tcount))
                 time.sleep(stime)
         html = pq(firstPage)
         #获取总计有多少页
@@ -194,7 +194,7 @@ if __name__ == '__main__':
                 finally:
                     stime = 5*(6 - ncount)
                     ncount -= 1
-                    print '将等待%s秒，第%s次重试……' % (str(stime), str(ncount))
+                    print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - ncount))
                     time.sleep(stime)
             nhtml = pq(page)
             nitems = nhtml('.shop-list ul li')
