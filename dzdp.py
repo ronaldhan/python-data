@@ -215,6 +215,7 @@ if __name__ == '__main__':
                 time.sleep(0.5)
             mysqlconn.commit()
             print '%s--page %s--finished' % (kword, str(j))
+        spage = 2
         print '<---------------->'
     print 'all finished'
     mysqlconn.close()
