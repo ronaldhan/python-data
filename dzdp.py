@@ -139,10 +139,12 @@ if __name__ == '__main__':
         firstPage = ''
         while tcount:
             try:
-                firstPage = requests.get(firstUrl).text
+                fPage = requests.get(firstUrl)
+                if fPage.status_code == 200:
+                    firstPage = fPage.text
                 break
             except Exception,ex:
-                setstate(i)
+                setstate(i, 1)
                 print '网络连接遇到问题，状态参数已保存，下次从第%s类别：%s处执行' % (str(i), kword)
             finally:
                 stime = 5*(6 - tcount)
@@ -182,7 +184,9 @@ if __name__ == '__main__':
             ncount = 5
             while ncount:
                 try:
-                    page = requests.get(nUrl).text
+                    npage = requests.get(nUrl)
+                    if npage.status_code == 200:
+                        page = npage.text
                     break
                 except Exception,ex:
                     setstate(i, j, total)
