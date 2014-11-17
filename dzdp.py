@@ -143,9 +143,12 @@ if __name__ == '__main__':
                 break
             except Exception,ex:
                 setstate(i)
-                print '网络连接遇到问题，状态参数已保存，下次从断点处执行'
+                print '网络连接遇到问题，状态参数已保存，下次从第%s类别：%s处执行' % (str(i), kword)
             finally:
+                stime = 5*(6 - tcount)
                 tcount -= 1
+                print '将等待%s秒，第%s次重试……' % (str(stime), str(tcount))
+                time.sleep(stime)
         html = pq(firstPage)
         #获取总计有多少页
         tpage = html('.page a')[-2]
@@ -173,9 +176,22 @@ if __name__ == '__main__':
         print '%s--page 1--finished' % kword
         #处理剩余的页面
         total = Decimal(totalnum)
-        for j in range(2, total + 1):
+        for j in range(spage, total + 1):
             nUrl = nextUrl.replace('(*)', str(j))
-            page = requests.get(nUrl).text
+            page = ''
+            ncount = 5
+            while ncount:
+                try:
+                    page = requests.get(nUrl).text
+                    break
+                except Exception,ex:
+                    setstate(i, j, total)
+                    print '网络连接遇到问题，状态参数已保存，下次从第%s类别：%s第%s页处执行' % (str(i), kword, str(j))
+                finally:
+                    stime = 5*(6 - ncount)
+                    ncount -= 1
+                    print '将等待%s秒，第%s次重试……' % (str(stime), str(ncount))
+                    time.sleep(stime)
             nhtml = pq(page)
             nitems = nhtml('.shop-list ul li')
             for nitem in nitems:
