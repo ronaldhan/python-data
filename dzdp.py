@@ -36,21 +36,6 @@ def process(item):
     except AttributeError:
         avg = '-1'
     try:
-        slist = item('.comment-list b')
-        if len(slist) == 0:
-            kouwei = ''
-            huanjing = ''
-            fuwu = ''
-            pass
-        else:
-            kouwei = pq(slist[0]).text()
-            huanjing = pq(slist[1]).text()
-            fuwu = pq(slist[2]).text()
-    except AttributeError:
-        kouwei = '-1'
-        huanjing = '-1'
-        fuwu = '-1'
-    try:
         tagaddr = item('.tag-addr')
         tags = pq(tagaddr)('.tag').text()
         address = '丰台区' + pq(tagaddr)('.addr').text()
@@ -92,7 +77,7 @@ def process(item):
     except AttributeError:
         utags = '-1'
     print 'item %s dealed' % shopname
-    return (shopname,grade,comment,avg,kouwei,huanjing,fuwu,tags,address,phone,yytime,utags)
+    return (shopname,grade,comment,avg,tags,address,phone,yytime,utags)
 
 
 def getstate():
@@ -156,15 +141,12 @@ if __name__ == '__main__':
         #获取所有的条目
         items = html('.shop-list ul li')
         for item in items:
-            shopname, grade, comment, avg, kouwei, huanjing, fuwu, tags, address, phone, yytime, utags = process(item)
+            shopname, grade, comment, avg, tags, address, phone, yytime, utags = process(item)
             mysqlconn.insert(mysql_tablename,
                              name=shopname,
                              grade=grade,
                              comment=comment,
                              avg=avg,
-                             kouwei=kouwei,
-                             huanjing=huanjing,
-                             fuwu=fuwu,
                              tags=tags,
                              address=address,
                              phone=phone,
@@ -197,15 +179,12 @@ if __name__ == '__main__':
             nhtml = pq(page)
             nitems = nhtml('.shop-list ul li')
             for nitem in nitems:
-                shopname, grade, comment, avg, kouwei, huanjing, fuwu, tags, address, phone, yytime, utags = process(nitem)
+                shopname, grade, comment, avg, tags, address, phone, yytime, utags = process(nitem)
                 mysqlconn.insert(mysql_tablename,
                                  name=shopname,
                                  grade=grade,
                                  comment=comment,
                                  avg=avg,
-                                 kouwei=kouwei,
-                                 huanjing=huanjing,
-                                 fuwu=fuwu,
                                  tags=tags,
                                  address=address,
                                  phone=phone,
