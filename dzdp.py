@@ -22,14 +22,25 @@ def process(item):
     except AttributeError:
         grade = '-1'
     try:
-        comment = pq(remark)('.review-num b').text()
+        reviewnum = pq(remark)('.review-num b')
+        if reviewnum:
+            comment = reviewnum.text()
+        else:
+            reviewnum = pq(remark)('a')[0]
+            reviewnum = pq(reviewnum)
+            comment = reviewnum.text()
         #comment会出现没有点评的现象，需要进行字符串处理
         if comment == u'我要点评':
             comment = u'0'
     except AttributeError:
         comment = '-1'
     try:
-        avg = pq(remark)('.mean-price b').text()
+        meanprice = pq(remark)('.mean-price b')
+        if meanprice:
+            avg = meanprice.text()
+        else:
+            meanprice = pq(remark)('.mean-price')
+            avg = pq(meanprice).text()
         #可能没有价格信息
         if avg == u'-':
             avg = u'0'
