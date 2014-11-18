@@ -164,7 +164,7 @@ if __name__ == '__main__':
                              yytime=yytime,
                              utags=utags,
                              kword=kword)
-            time.sleep(0.5)
+            time.sleep(1)
         mysqlconn.commit()
         print '%s--page 1--finished' % kword
         #处理剩余的页面
@@ -202,7 +202,7 @@ if __name__ == '__main__':
                                  yytime=yytime,
                                  utags=utags,
                                  kword=kword)
-                time.sleep(0.5)
+                time.sleep(1)
             mysqlconn.commit()
             print '%s--page %s--finished' % (kword, str(j))
         spage = 2
