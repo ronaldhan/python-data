@@ -49,7 +49,7 @@ def process(item):
     try:
         tagaddr = item('.tag-addr')
         tags = pq(tagaddr)('.tag').text()
-        address = '丰台区' + pq(tagaddr)('.addr').text()
+        address = '海淀区' + pq(tagaddr)('.addr').text()
     except AttributeError:
         tags = '-1'
         address = '-1'
@@ -112,6 +112,24 @@ def setstate(sgroup=0, spage=2):
         statefile.write(sjson)
 
 
+def getpage(url, count=5, interval=10):
+    #尝试5次，失败后自动延长时间
+    fpage = ''
+    try:
+        fpage = requests.get(url).text
+        return fpage
+    except Exception,ex:
+        if count:
+            stime = interval*(6 - count)
+            print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - count))
+            time.sleep(stime)
+            count -= 1
+            value = getpage(url)
+            return value
+        else:
+            return ''
+
+
 if __name__ == '__main__':
     mysqlconn = mydb.Connection(host=mysql_host, database=mysql_database, user=mysql_user, password=mysql_password)
     urlFile = open(cFile, 'r')
@@ -128,23 +146,7 @@ if __name__ == '__main__':
             kword = lines[3*i][:-1]
             firstUrl = lines[3*i + 1][:-1]
             nextUrl = lines[3*i + 2]
-        #请求计数
-        tcount = 5
-        firstPage = ''
-        while tcount:
-            try:
-                fPage = requests.get(firstUrl)
-                if fPage.status_code == 200:
-                    firstPage = fPage.text
-                break
-            except Exception,ex:
-                print '网络连接遇到问题，状态参数已保存，下次从第%s类别：%s处执行' % (str(i), kword)
-            finally:
-                setstate(i, 1)
-                stime = 5*(6 - tcount)
-                tcount -= 1
-                print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - tcount))
-                time.sleep(stime)
+        firstPage = getpage(firstUrl)
         html = pq(firstPage)
         #获取总计有多少页
         tpage = html('.page a')[-2]
@@ -164,7 +166,7 @@ if __name__ == '__main__':
                              yytime=yytime,
                              utags=utags,
                              kword=kword)
-            time.sleep(1)
+            time.sleep(10)
         mysqlconn.commit()
         print '%s--page 1--finished' % kword
         #处理剩余的页面
@@ -184,8 +186,8 @@ if __name__ == '__main__':
                 finally:
                     setstate(i, j)
                     stime = 5*(6 - ncount)
-                    ncount -= 1
                     print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - ncount))
+                    ncount -= 1
                     time.sleep(stime)
             nhtml = pq(page)
             nitems = nhtml('.shop-list ul li')
@@ -202,7 +204,7 @@ if __name__ == '__main__':
                                  yytime=yytime,
                                  utags=utags,
                                  kword=kword)
-                time.sleep(1)
+                time.sleep(10)
             mysqlconn.commit()
             print '%s--page %s--finished' % (kword, str(j))
         spage = 2
