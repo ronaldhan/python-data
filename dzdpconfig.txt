@@ -1,6 +1,6 @@
 美食
 http://www.dianping.com/search/keyword/2/10_%E6%B5%B7%E6%B7%80%E5%8C%BA#breadCrumb
-http://www.dianping.com/search/keyword/2/10_%E6%B5%B7%E6%B7%80%E5%8C%BA/p(*)?aid=5b9bc8932edfce95ca9311612109f1d453cd9699cb5e0e96ce7cdc0c41c63407204af441716b0e3a22ccf884875e3534587544585f7bb7103b676ebfb07a9a9a56a8c095714d682fd12944180675b1580c842dbb0d4544fd0794eb0f3adceab4&tc=332d75ed3359fe11e08a92d6606f7f676b17a8ae9623465b9b457698a6e30fbaf096dfbc0be86d42aa84&tc=3
+http://www.dianping.com/search/keyword/2/10_%E6%B5%B7%E6%B7%80%E5%8C%BA/p(*)
 休闲娱乐
 http://www.dianping.com/search/keyword/2/30_%E6%B5%B7%E6%B7%80%E5%8C%BA#breadCrumb
 http://www.dianping.com/search/keyword/2/30_%E6%B5%B7%E6%B7%80%E5%8C%BA/p(*)

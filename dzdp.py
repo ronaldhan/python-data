@@ -146,68 +146,44 @@ if __name__ == '__main__':
             kword = lines[3*i][:-1]
             firstUrl = lines[3*i + 1][:-1]
             nextUrl = lines[3*i + 2]
-        firstPage = getpage(firstUrl)
-        html = pq(firstPage)
-        #获取总计有多少页
-        tpage = html('.page a')[-2]
-        totalnum = pq(tpage).text()
-        #获取所有的条目
-        items = html('.shop-list ul li')
-        for item in items:
-            shopname, grade, comment, avg, tags, address, phone, yytime, utags = process(item)
-            mysqlconn.insert(mysql_tablename,
-                             name=shopname,
-                             grade=grade,
-                             comment=comment,
-                             avg=avg,
-                             tags=tags,
-                             address=address,
-                             phone=phone,
-                             yytime=yytime,
-                             utags=utags,
-                             kword=kword)
-            time.sleep(10)
-        mysqlconn.commit()
-        print '%s--page 1--finished' % kword
-        #处理剩余的页面
-        total = Decimal(totalnum)
-        for j in range(spage, total + 1):
-            nUrl = nextUrl.replace('(*)', str(j))
-            page = ''
-            ncount = 5
-            while ncount:
-                try:
-                    npage = requests.get(nUrl)
-                    if npage.status_code == 200:
-                        page = npage.text
-                    break
-                except Exception,ex:
-                    print '网络连接遇到问题，状态参数已保存，下次从第%s类别：%s第%s页处执行' % (str(i), kword, str(j))
-                finally:
-                    setstate(i, j)
-                    stime = 5*(6 - ncount)
-                    print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - ncount))
-                    ncount -= 1
-                    time.sleep(stime)
-            nhtml = pq(page)
-            nitems = nhtml('.shop-list ul li')
-            for nitem in nitems:
-                shopname, grade, comment, avg, tags, address, phone, yytime, utags = process(nitem)
-                mysqlconn.insert(mysql_tablename,
-                                 name=shopname,
-                                 grade=grade,
-                                 comment=comment,
-                                 avg=avg,
-                                 tags=tags,
-                                 address=address,
-                                 phone=phone,
-                                 yytime=yytime,
-                                 utags=utags,
-                                 kword=kword)
-                time.sleep(10)
-            mysqlconn.commit()
-            print '%s--page %s--finished' % (kword, str(j))
-        spage = 2
-        print '<---------------->'
+        try:
+            #判断是否为首页
+            fpage = getpage(firstUrl)
+            html = pq(fpage)
+            #获取总计有多少页
+            tpage = html('.page a')[-2]
+            totalnum = pq(tpage).text()
+            total = Decimal(totalnum)
+            for j in range(spage, total + 1):
+                #nUrl = (j == 1) and firstUrl or nextUrl.replace('(*)', str(j))
+                if j == 1:
+                    nUrl = firstUrl
+                else:
+                    nUrl = nextUrl.replace('(*)', str(j))
+                page = getpage(nUrl)
+                nhtml = pq(page)
+                nitems = nhtml('.shop-list ul li')
+                for nitem in nitems:
+                    shopname, grade, comment, avg, tags, address, phone, yytime, utags = process(nitem)
+                    mysqlconn.insert(mysql_tablename,
+                                     name=shopname,
+                                     grade=grade,
+                                     comment=comment,
+                                     avg=avg,
+                                     tags=tags,
+                                     address=address,
+                                     phone=phone,
+                                     yytime=yytime,
+                                     utags=utags,
+                                     kword=kword)
+                    time.sleep(1)
+                mysqlconn.commit()
+                print '%s--page %s--finished' % (kword, str(j))
+        except Exception,ex:
+            #判断j变量是否初始化，没有初始化赋值1
+            j = ('j' in locals().keys()) and j or 1
+            setstate(i, j)
+        else:
+            print '<---------------->'
     print 'all finished'
     mysqlconn.close()
