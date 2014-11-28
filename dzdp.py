@@ -188,7 +188,7 @@ if __name__ == '__main__':
                                      yytime=yytime,
                                      utags=utags,
                                      kword=kword)
-                    time.sleep(7)
+                    time.sleep(10)
                 mysqlconn.commit()
                 print '%s--page %s--finished' % (kword, str(j))
             print '<---------------->'
