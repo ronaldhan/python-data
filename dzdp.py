@@ -8,6 +8,12 @@ import json
 from dzdpconfig import *
 
 
+class MyException(Exception):
+    def __init__(self):
+        Exception.__init__(self)
+        print 'web request exception'
+
+
 def process(item):
     ##处理一个条目，返回所有解析信息
     #部分信息在概略页获取，部分在详细页获取
@@ -136,19 +142,18 @@ if __name__ == '__main__':
     lines = urlFile.readlines()
     group = len(lines)/3
     sgroup, spage = getstate()
-    for i in range(sgroup, group):
-        #需要将行末的换行符去掉，最后一行单独处理
-        if i < group - 1:
-            kword = lines[3*i][:-1]
-            firstUrl = lines[3*i + 1][:-1]
-            nextUrl = lines[3*i + 2][:-1]
-        else:
-            kword = lines[3*i][:-1]
-            firstUrl = lines[3*i + 1][:-1]
-            nextUrl = lines[3*i + 2]
-        print '第%s类-----%s开始' % (str(i), kword)
-        try:
-            #判断是否为首页
+    try:
+        for i in range(sgroup, group):
+            #需要将行末的换行符去掉，最后一行单独处理
+            if i < group - 1:
+                kword = lines[3*i][:-1]
+                firstUrl = lines[3*i + 1][:-1]
+                nextUrl = lines[3*i + 2][:-1]
+            else:
+                kword = lines[3*i][:-1]
+                firstUrl = lines[3*i + 1][:-1]
+                nextUrl = lines[3*i + 2]
+            print '第%s类-----%s开始' % (str(i), kword)
             fpage = getpage(firstUrl)
             html = pq(fpage)
             #获取总计有多少页
@@ -163,6 +168,9 @@ if __name__ == '__main__':
                     tUrl = nextUrl
                     nUrl = tUrl.replace('(*)', str(j))
                 page = getpage(nUrl)
+                if len(page) < 5000:
+                    #警告页内容
+                    raise MyException()
                 nhtml = pq(page)
                 nitems = nhtml('.shop-list ul li')
                 for nitem in nitems:
@@ -178,14 +186,16 @@ if __name__ == '__main__':
                                      yytime=yytime,
                                      utags=utags,
                                      kword=kword)
-                    time.sleep(0.5)
+                    #time.sleep(0.5)
                 mysqlconn.commit()
                 print '%s--page %s--finished' % (kword, str(j))
             print '<---------------->'
-        except Exception, ex:
-            print ex.message
-            #判断j变量是否初始化，没有初始化赋值1
-            j = ('j' in locals().keys()) and j or 1
-            setstate(i, j)
-    print 'all finished'
-    mysqlconn.close()
+            spage = 1
+        print 'all finished'
+    except Exception, ex:
+        print ex.message
+        #判断j变量是否初始化，没有初始化赋值1
+        j = ('j' in locals().keys()) and j or 1
+        setstate(i, j)
+    finally:
+        mysqlconn.close()
