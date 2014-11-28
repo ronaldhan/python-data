@@ -101,7 +101,7 @@ def getstate():
         return (sgroup,spage)
 
 
-def setstate(sgroup=0, spage=2):
+def setstate(sgroup=0, spage=1):
     #设置state文件，保存状态信息
     content = open(sFile, 'r').read()
     cjson = json.loads(content)
@@ -124,10 +124,10 @@ def getpage(url, count=5, interval=10):
             print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - count))
             time.sleep(stime)
             count -= 1
-            value = getpage(url)
+            value = getpage(url, count)
             return value
         else:
-            return ''
+            return 'bad'
 
 
 if __name__ == '__main__':
@@ -146,6 +146,7 @@ if __name__ == '__main__':
             kword = lines[3*i][:-1]
             firstUrl = lines[3*i + 1][:-1]
             nextUrl = lines[3*i + 2]
+        print '第%s类-----%s开始' % (str(i), kword)
         try:
             #判断是否为首页
             fpage = getpage(firstUrl)
@@ -159,7 +160,8 @@ if __name__ == '__main__':
                 if j == 1:
                     nUrl = firstUrl
                 else:
-                    nUrl = nextUrl.replace('(*)', str(j))
+                    tUrl = nextUrl
+                    nUrl = tUrl.replace('(*)', str(j))
                 page = getpage(nUrl)
                 nhtml = pq(page)
                 nitems = nhtml('.shop-list ul li')
@@ -176,14 +178,14 @@ if __name__ == '__main__':
                                      yytime=yytime,
                                      utags=utags,
                                      kword=kword)
-                    time.sleep(1)
+                    time.sleep(0.5)
                 mysqlconn.commit()
                 print '%s--page %s--finished' % (kword, str(j))
-        except Exception,ex:
+            print '<---------------->'
+        except Exception, ex:
+            print ex.message
             #判断j变量是否初始化，没有初始化赋值1
             j = ('j' in locals().keys()) and j or 1
             setstate(i, j)
-        else:
-            print '<---------------->'
     print 'all finished'
     mysqlconn.close()
