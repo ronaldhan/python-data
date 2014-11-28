@@ -155,6 +155,8 @@ if __name__ == '__main__':
                 nextUrl = lines[3*i + 2]
             print '第%s类-----%s开始' % (str(i), kword)
             fpage = getpage(firstUrl)
+            if len(fpage) < 5000:
+                raise MyException()
             html = pq(fpage)
             #获取总计有多少页
             tpage = html('.page a')[-2]
@@ -186,7 +188,7 @@ if __name__ == '__main__':
                                      yytime=yytime,
                                      utags=utags,
                                      kword=kword)
-                    #time.sleep(0.5)
+                    time.sleep(7)
                 mysqlconn.commit()
                 print '%s--page %s--finished' % (kword, str(j))
             print '<---------------->'
