@@ -32,6 +32,7 @@ if '__main__' == __name__:
     #检测文件是否存在
     if os.path.exists(fileName):
         os.remove(fileName)
+    #sql = u'select * from %s limit 100' % tableName
     sql = u'select * from %s' % tableName
     table = mysqlconn.query(sql)
 
@@ -41,8 +42,8 @@ if '__main__' == __name__:
     w.field('tags', 'C', '100')
     count = 0
     for row in table:
-        name = row['NAME'].strip()
-        tags = row['TYPE'].strip()
+        name = row['NAME'].strip().decode('utf-8').encode('cp936')
+        tags = row['TYPE'].strip().decode('utf-8').encode('cp936')
         lng = Decimal(row['X'].strip())
         lat = Decimal(row['Y'].strip())
         w.point(lng, lat)
