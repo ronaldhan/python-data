@@ -11,7 +11,7 @@ except ImportError:
 #程序配置信息
 fileFolder = u'D:\data\shp'
 suffix = u'.shp'
-tableName = 'bdditu'
+tableName = 'bjpoi'
 
 mysql_host = "localhost"
 mysql_database = "bjdata"
@@ -38,20 +38,17 @@ if '__main__' == __name__:
     w = shp.Writer(shp.POINT)
     w.field('id', 'C', '8')
     w.field('name', 'C', '100')
-    w.field('address', 'C', '100')
-    w.field('catalog', 'C', '10')
-    w.field('subcatalog', 'C', '20')
+    w.field('tags', 'C', '100')
+    count = 0
     for row in table:
-        id = row['id']
-        name = row['name'].strip().decode('utf-8').encode('cp936')
-        address = row['address'].strip().decode('utf-8').encode('cp936')
-        catalog = row['catalog']
-        subcatalog = row['subcatalog'].decode('utf-8').encode('cp936')
-        lng = Decimal(row['lng'].strip())
-        lat = Decimal(row['lat'].strip())
+        name = row['NAME'].strip().decode('utf-8').encode('cp936')
+        tags = row['TYPE'].strip().decode('utf-8').encode('cp936')
+        lng = Decimal(row['X'].strip())
+        lat = Decimal(row['Y'].strip())
         w.point(lng, lat)
-        w.record(id, name, address, catalog, subcatalog)
-        print '%s dealed' % id
+        w.record(str(count), name, tags)
+        print '%s dealed' % str(count)
+        count += 1
     shape = StringIO()
     shx = StringIO()
     dbf = StringIO()
