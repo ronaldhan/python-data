@@ -41,8 +41,8 @@ if '__main__' == __name__:
     w.field('tags', 'C', '100')
     count = 0
     for row in table:
-        name = row['NAME'].strip().decode('utf-8').encode('cp936')
-        tags = row['TYPE'].strip().decode('utf-8').encode('cp936')
+        name = row['NAME'].strip()
+        tags = row['TYPE'].strip()
         lng = Decimal(row['X'].strip())
         lat = Decimal(row['Y'].strip())
         w.point(lng, lat)
