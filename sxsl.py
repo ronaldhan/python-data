@@ -10,14 +10,14 @@ mysql_host = "localhost"
 mysql_database = "test"
 mysql_user = "root"
 mysql_password = "ronald"
-tableName = 'sxsl1'
+tableName = 'sxsl2'
 
 mysqlconn = mydb.Connection(host=mysql_host, database=mysql_database, user=mysql_user, password=mysql_password)
 rURL = 'http://www.ctg.com.cn/inc/sqsk.php'
 ##ST = datetime.date(2000, 01, 01)
-ST = datetime.date(2012, 11, 01)
+ST = datetime.date(1982, 01, 01)
 ##ET = datetime.date(1999, 9, 30)
-ET = datetime.date(2012, 12, 31)
+ET = datetime.date(1998, 12, 31)
 timedelta = ET - ST
 daycount = timedelta.days + 1
 for i in range(daycount):
