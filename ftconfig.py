@@ -55,5 +55,5 @@ mysql_host = "localhost"
 mysql_database = "bjdata"
 mysql_user = "root"
 mysql_password = "ronald"
-mysql_tablename = "bdditu"
+mysql_tablename = "bdditu1"
 

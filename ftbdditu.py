@@ -35,7 +35,8 @@ for k, v in catalogs.iteritems():
                                                  lng=str(item['location']['lng']),
                                                  lat=str(item['location']['lat']),
                                                  catalog=catalog,
-                                                 subcatalog=word)
+                                                 subcatalog=word,
+                                                 uid=item['uid'])
                             mysqlconn.commit()
                         else:
                             print 'XXXXX %s %s bound:%s page:%s  not finished XXXXX' % (catalog, word, str(key), str(i))
