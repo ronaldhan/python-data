@@ -2,6 +2,8 @@
 import requests
 import python_mysql as mydb
 from ftconfig import *
+import time
+
 
 mysqlconn = mydb.Connection(host=mysql_host, database=mysql_database, user=mysql_user, password=mysql_password)
 #遍历catalog
@@ -38,6 +40,7 @@ for k, v in catalogs.iteritems():
                                                  subcatalog=word,
                                                  uid=item['uid'])
                             mysqlconn.commit()
+                            time.sleep(1)
                         else:
                             print 'XXXXX %s %s bound:%s page:%s  not finished XXXXX' % (catalog, word, str(key), str(i))
                         print '~~~~~ %s %s bound:%s page:%s finished ~~~~~' % (catalog, word, str(key), str(i))
