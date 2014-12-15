@@ -15,6 +15,7 @@ for k, v in catalogs.iteritems():
         for key, religion in religions.iteritems():
             bounds = ','.join(religion)
             params['bounds'] = bounds
+            params['page_num'] = 0
             r = requests.get(BD_API_PLACE, params=params)
             result = r.json()
             if result['status'] == 0:
@@ -31,21 +32,26 @@ for k, v in catalogs.iteritems():
                         if fresult['status'] == 0:
                             results = fresult['results']
                             for item in results:
-                                mysqlconn.insert(mysql_tablename,
-                                                 name=item['name'],
-                                                 address=item['address'],
-                                                 lng=str(item['location']['lng']),
-                                                 lat=str(item['location']['lat']),
-                                                 catalog=catalog,
-                                                 subcatalog=word,
-                                                 uid=item['uid'])
+                                #有些结果并没有address，需要判断
+                                if 'address' in item.keys():
+                                    mysqlconn.insert(mysql_tablename,
+                                                     name=item['name'],
+                                                     address=item['address'],
+                                                     lng=str(item['location']['lng']),
+                                                     lat=str(item['location']['lat']),
+                                                     catalog=catalog,
+                                                     subcatalog=word,
+                                                     uid=item['uid'])
+                                else:
+                                    continue
                             mysqlconn.commit()
                             time.sleep(1)
                         else:
                             print 'XXXXX %s %s bound:%s page:%s  not finished XXXXX' % (catalog, word, str(key), str(i))
                         print '~~~~~ %s %s bound:%s page:%s finished ~~~~~' % (catalog, word, str(key), str(i))
                 else:
-                    pass
+                    print 'XXXXX %s %s bound:%s total:%s XXXXX' % (catalog, word, str(key), str(total))
+                    continue
             else:
                 print 'XXXXX %s %s bound:%s not finished XXXXX' % (catalog, word, str(key))
             print '~~~~~ %s %s bound:%s finished ~~~~~' % (catalog, word, str(key))

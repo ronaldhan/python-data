@@ -73,13 +73,26 @@ catalogs = {
     'S4': ['停车场']
 }
 
+
+# catalogs = {
+#     'A21': ['会展'],
+#     'A22': ['文化馆'],
+#     'B21': ['金融保险'],
+#     'B22': ['新闻出版', '广告传媒', '广播'],
+#     'B23': ['设计'],
+#     'B29': ['商贸'],
+#     'B3': ['娱乐'],
+#     'B9': ['电信', '供水', '燃气', '供电', '旅游信息', '培训', '诊所', '汽车维修', '美容美发', '洗衣', '公共厕所'],
+#     'G1': ['公园']
+# }
+
 #baidu api
 BD_API_PLACE = 'http://api.map.baidu.com/place/v2/search?'
 params = {
     'output': 'json',
     'ak': 'UjDN5L4WOmeoTAMIZG73MU1F',
     'page_num': '0',
-    'page_size': '10'
+    'page_size': '20'
 }
 
 #mysql
