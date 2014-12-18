@@ -11,11 +11,11 @@ mysql_host = "localhost"
 mysql_database = "bjdata"
 mysql_user = "root"
 mysql_password = "ronald"
-tablename = 'bdditu'
+tablename = 'bdditu1'
 
 if '__main__' == __name__:
     mysqlconn = mydb.Connection(host=mysql_host, database=mysql_database, user=mysql_user, password=mysql_password)
-    sql = u'select id,lng,lat from %s' % tablename
+    sql = u'select id,lng,lat from %s where id > 14420' % tablename
     table = mysqlconn.query(sql)
     for row in table:
         rid = row['id']

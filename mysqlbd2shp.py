@@ -11,7 +11,7 @@ except ImportError:
 #程序配置信息
 fileFolder = u'D:\data\shp'
 suffix = u'.shp'
-tableName = 'bdditu'
+tableName = 'bdditu1'
 
 mysql_host = "localhost"
 mysql_database = "bjdata"
@@ -41,16 +41,18 @@ if '__main__' == __name__:
     w.field('address', 'C', '100')
     w.field('catalog', 'C', '10')
     w.field('subcatalog', 'C', '20')
+    w.field('uid','C','50')
     for row in table:
         id = row['id']
         name = row['name'].strip().decode('utf-8').encode('cp936')
         address = row['address'].strip().decode('utf-8').encode('cp936')
         catalog = row['catalog']
         subcatalog = row['subcatalog'].decode('utf-8').encode('cp936')
+        uid = row['uid'].strip()
         lng = Decimal(row['lng'].strip())
         lat = Decimal(row['lat'].strip())
         w.point(lng, lat)
-        w.record(id, name, address, catalog, subcatalog)
+        w.record(id, name, address, catalog, subcatalog, uid)
         print '%s dealed' % id
     shape = StringIO()
     shx = StringIO()
