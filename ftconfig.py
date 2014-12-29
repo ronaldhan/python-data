@@ -88,11 +88,21 @@ catalogs = {
 
 #baidu api
 BD_API_PLACE = 'http://api.map.baidu.com/place/v2/search?'
+BD_API_DETAIL = 'http://api.map.baidu.com/place/v2/detail?'
+
+#place params
 params = {
     'output': 'json',
     'ak': 'UjDN5L4WOmeoTAMIZG73MU1F',
     'page_num': '0',
     'page_size': '20'
+}
+
+#detail params
+dparams = {
+    'output': 'json',
+    'ak': 'UjDN5L4WOmeoTAMIZG73MU1F',
+    'scope': '2'
 }
 
 #mysql
