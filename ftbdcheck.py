@@ -17,12 +17,9 @@ if __name__ == '__main__':
     ctable = mysqlconn.query(sql)
     tcount = int(ctable[0]['count'])
     pages = tcount / pcount
-    for i in range(163, pages + 1):
+    for i in range(pages + 1):
         offset = i * pcount
-        if i < pages:
-            sql = 'select id, uid from %s limit %s,%s' % (mysql_tablename, str(offset), str(pcount))
-        else:
-            sql = 'select id, uid from %s limit %s,%s' % (mysql_tablename, str(offset), '-1')
+        sql = 'select id, uid from %s limit %s,%s' % (mysql_tablename, str(offset), str(pcount))
         ttable = mysqlconn.query(sql)
         for row in ttable:
             rid = row['id']
