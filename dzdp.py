@@ -1,10 +1,13 @@
 # -*- coding:utf-8 -*-
-import requests
-import python_mysql as mydb
-from pyquery import PyQuery as pq
 from decimal import Decimal
 import time
 import json
+from urllib import unquote
+
+import requests
+from pyquery import PyQuery as pq
+
+import python_mysql as mydb
 from dzdpconfig import *
 
 
@@ -55,7 +58,7 @@ def process(item):
     try:
         tagaddr = item('.tag-addr')
         tags = pq(tagaddr)('.tag').text()
-        address = '海淀区' + pq(tagaddr)('.addr').text()
+        address = pq(tagaddr)('.addr').text()
     except AttributeError:
         tags = '-1'
         address = '-1'
@@ -120,20 +123,28 @@ def setstate(sgroup=0, spage=1):
 
 def getpage(url, count=5, interval=10):
     #尝试5次，失败后自动延长时间
-    fpage = ''
-    try:
-        fpage = requests.get(url).text
-        return fpage
-    except Exception,ex:
-        if count:
-            stime = interval*(6 - count)
-            print '将等待%s秒，第%s次重试……' % (str(stime), str(6 - count))
+    for i in range(count):
+        try:
+            fpage = requests.get(url).text
+            if len(fpage) < 5000:
+                raise
+            break
+        except Exception,ex:
+            stime = interval*(5 - i)
+            print '将等待%s秒，第%s次重试……' % (str(stime), str(i + 1))
             time.sleep(stime)
-            count -= 1
-            value = getpage(url, count)
-            return value
-        else:
-            return 'bad'
+    return fpage
+
+
+def getdistrict(url):
+    #从配置文件的url中提取出当前所在的行政区名称
+    #传入nexturl进行解析
+    start = url.rindex('_')
+    end = url.rindex('/')
+    sub = url[start + 1:end]
+    district_name = unquote(sub)
+
+    return district_name
 
 
 if __name__ == '__main__':
@@ -162,6 +173,8 @@ if __name__ == '__main__':
             tpage = html('.page a')[-2]
             totalnum = pq(tpage).text()
             total = Decimal(totalnum)
+            #获取当前行政区名称
+            district_name = getdistrict(nextUrl)
             for j in range(spage, total + 1):
                 #nUrl = (j == 1) and firstUrl or nextUrl.replace('(*)', str(j))
                 if j == 1:
@@ -183,7 +196,7 @@ if __name__ == '__main__':
                                      comment=comment,
                                      avg=avg,
                                      tags=tags,
-                                     address=address,
+                                     address=district_name + address,
                                      phone=phone,
                                      yytime=yytime,
                                      utags=utags,
