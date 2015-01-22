@@ -10,7 +10,7 @@ from weibodataconfig import *
 if __name__ == '__main__':
     mongo_connection = pymongo.Connection(mongo_host, mongo_port)
     mysql_connection = mydb.Connection(host=mysql_host, db=mysql_database, port=mysql_port,
-                                       user=mysql_user, passwd=mysql_password)
+                                       user=mysql_user, passwd=mysql_password, charset=mysql_charset)
     mysql_cursor = mysql_connection.cursor()
     mongo_db = mongo_connection['test']
     mongo_collections = mongo_db.collection_names()
