@@ -72,10 +72,10 @@ if __name__ == '__main__':
                 retweeted_status = post2json['retweeted_status']
             else:
                 retweeted_status = ''
-            if hasattr(post2json, 'repost_count'):
-                repost_count = post2json['repost_count']
+            if hasattr(post2json, 'reposts_count'):
+                reposts_count = post2json['reposts_count']
             else:
-                repost_count = ''
+                reposts_count = ''
             if hasattr(post2json, 'comments_count'):
                 comments_count = post2json['comments_count']
             else:
@@ -92,7 +92,7 @@ if __name__ == '__main__':
                                     geo_lng=geo_lng,
                                     geo_lat=geo_lat,
                                     retweeted_status=retweeted_status,
-                                    repost_count=repost_count,
+                                    reposts_count=reposts_count,
                                     comments_count=comments_count,
                                     attitudes_count=attitudes_count)
             mysql_connection.insert(mysql_weibouser,
@@ -105,7 +105,7 @@ if __name__ == '__main__':
                                     friends_count=friends_count,
                                     statuses_count=statuses_count,
                                     favourites_count=favourites_count,
-                                    user_created_at=user_created_at,
+                                    created_at=user_created_at,
                                     bi_followers_count=bi_followers_count)
             mysql_connection.commit()
             count += 1
