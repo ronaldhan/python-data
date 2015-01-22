@@ -3,16 +3,15 @@ import os
 import time
 
 import pymongo
-import MySQLdb as mydb
 
 from weibodataconfig import *
 
 
 if __name__ == '__main__':
     mongo_connection = pymongo.Connection(mongo_host, mongo_port)
-    mysql_connection = mydb.Connection(host=mysql_host, db=mysql_database, port=mysql_port,
-                                       user=mysql_user, passwd=mysql_password, charset=mysql_charset)
-    mysql_cursor = mysql_connection.cursor()
+    # mysql_connection = mydb.Connection(host=mysql_host, db=mysql_database, port=mysql_port,
+    #                                    user=mysql_user, passwd=mysql_password, charset=mysql_charset)
+    # mysql_cursor = mysql_connection.cursor()
     mongo_db = mongo_connection['test']
     mongo_collections = mongo_db.collection_names()
     #list的remove方法没有返回值
@@ -25,7 +24,7 @@ if __name__ == '__main__':
     userfile = open(user_path, 'w')
     headline = 'uid;province;city;location;gender;' \
                'followers_count;friends_count;statuses_count;' \
-               'favourites_count;user_created_at; bi_followers_count\n'
+               'favourites_count;user_created_at;bi_followers_count\n'
     userfile.write(headline)
     userfile.flush()
     for collection in mongo_collections:
