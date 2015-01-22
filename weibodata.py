@@ -87,7 +87,8 @@ if __name__ == '__main__':
             else:
                 attitudes_count = ''
             # print text %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s
-            sql = "insert into %s " \
+            sql = "insert into %s (id, created_at, text, uid, geo_lng, geo_lat," \
+                  " retweeted_status, reposts_count, comments_count, attitudes_count" \
                   "values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" \
                   "" % (mysql_weibodata, pid, created_at,
                         text, uid, geo_lng, geo_lat, retweeted_status,
@@ -116,7 +117,9 @@ if __name__ == '__main__':
             #                         favourites_count=favourites_count,
             #                         created_at=user_created_at,
             #                         bi_followers_count=bi_followers_count)
-            sql = "insert into %s " \
+            sql = "insert into %s (uid, province, city, location, gender, " \
+                  "followers_count, friends_count, statuses_count, " \
+                  "favourites_count, created_at, bi_followers_count" \
                   "values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" \
                   "" % (mysql_weibouser, uid, province,
                         city, location, gender, followers_count, friends_count,
