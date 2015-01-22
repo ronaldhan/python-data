@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import os
 import time
 
 import pymongo
@@ -16,6 +17,8 @@ if __name__ == '__main__':
     mongo_collections = mongo_db.collection_names()
     #list的remove方法没有返回值
     mongo_collections.remove('system.indexes')
+    datafile = open(data_path, 'rw')
+    userfile = open(user_path, 'rw')
     for collection in mongo_collections:
         user_collction = mongo_db[collection]
         total = user_collction.find().count()
@@ -87,14 +90,14 @@ if __name__ == '__main__':
             else:
                 attitudes_count = ''
             # print text %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s
-            sql = "insert into %s (id, created_at, text, uid, geo_lng, geo_lat," \
-                  " retweeted_status, reposts_count, comments_count, attitudes_count) " \
-                  "values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" \
-                  "" % (mysql_weibodata, pid, created_at,
-                        text, uid, geo_lng, geo_lat, retweeted_status,
-                        reposts_count, comments_count, attitudes_count)
-            print sql
-            mysql_cursor.execute(sql)
+            # sql = "insert into %s (id, created_at, text, uid, geo_lng, geo_lat," \
+            #       " retweeted_status, reposts_count, comments_count, attitudes_count) " \
+            #       "values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" \
+            #       "" % (mysql_weibodata, pid, created_at,
+            #             text, uid, geo_lng, geo_lat, retweeted_status,
+            #             reposts_count, comments_count, attitudes_count)
+            # print sql
+            # mysql_cursor.execute(sql)
             # mysql_connection.insert(mysql_weibodata,
             #                         id=pid,
             #                         created_at=created_at,
@@ -118,19 +121,31 @@ if __name__ == '__main__':
             #                         favourites_count=favourites_count,
             #                         created_at=user_created_at,
             #                         bi_followers_count=bi_followers_count)
-            sql = "insert into %s (uid, province, city, location, gender, " \
-                  "followers_count, friends_count, statuses_count, " \
-                  "favourites_count, created_at, bi_followers_count) " \
-                  "values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" \
-                  "" % (mysql_weibouser, uid, province,
+            # sql = "insert into %s (uid, province, city, location, gender, " \
+            #       "followers_count, friends_count, statuses_count, " \
+            #       "favourites_count, created_at, bi_followers_count) " \
+            #       "values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" \
+            #       "" % (mysql_weibouser, uid, province,
+            #             city, location, gender, followers_count, friends_count,
+            #             statuses_count, favourites_count, user_created_at, bi_followers_count)
+            # mysql_cursor.execute(sql)
+            # mysql_connection.commit()
+            data_line = '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (pid, created_at,
+                        text, uid, geo_lng, geo_lat, retweeted_status,
+                        reposts_count, comments_count, attitudes_count)
+            user_line = '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (uid, province,
                         city, location, gender, followers_count, friends_count,
                         statuses_count, favourites_count, user_created_at, bi_followers_count)
-            mysql_cursor.execute(sql)
-            mysql_connection.commit()
+            datafile.writelines(data_line)
+            userfile.writelines(user_line)
             count += 1
             curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
             if count % 100 == 0:
                 print '%s----->%s/%s<------' % (curtime, str(count), str(total))
         curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
         print '%s----->%s dealed' % (curtime, collection)
+    datafile.flush()
+    datafile.close()
+    userfile.flush()
+    userfile.close()
     print 'all record finished'

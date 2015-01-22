@@ -14,3 +14,6 @@ mysql_weibouser = 'weibouser'
 mongo_host = "localhost"
 mongo_port = 27017
 
+#file path
+data_path = r'D:\data\sinaweibodata\sinaweibo.txt'
+user_path = r'D:\data\sinaweibodata\weibouser.txt'
