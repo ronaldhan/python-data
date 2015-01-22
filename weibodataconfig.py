@@ -4,7 +4,7 @@ mysql_host = "localhost"
 mysql_database = "weibo"
 mysql_user = "root"
 mysql_password = "ronald"
-mysql_weibodata = 'weibodata'
+mysql_weibodata = 'sinaweibo'
 mysql_weibouser = 'weibouser'
 
 
