@@ -86,10 +86,10 @@ if __name__ == '__main__':
                 attitudes_count = post2json['attitudes_count']
             else:
                 attitudes_count = ''
-            # print text
-            sql = 'insert into %s ' \
-                  'values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)' \
-                  '' % (mysql_weibodata, pid, created_at,
+            # print text %s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s
+            sql = "insert into %s " \
+                  "values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" \
+                  "" % (mysql_weibodata, pid, created_at,
                         text, uid, geo_lng, geo_lat, retweeted_status,
                         reposts_count, comments_count, attitudes_count)
             mysql_cursor.execute(sql)
@@ -116,9 +116,9 @@ if __name__ == '__main__':
             #                         favourites_count=favourites_count,
             #                         created_at=user_created_at,
             #                         bi_followers_count=bi_followers_count)
-            sql = 'insert into %s ' \
-                  'values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)' \
-                  '' % (mysql_weibouser, uid, province,
+            sql = "insert into %s " \
+                  "values('%s','%s','%s','%s','%s','%s','%s','%s','%s','%s','%s')" \
+                  "" % (mysql_weibouser, uid, province,
                         city, location, gender, followers_count, friends_count,
                         statuses_count, favourites_count, user_created_at, bi_followers_count)
             mysql_cursor.execute(sql)
