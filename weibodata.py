@@ -85,7 +85,7 @@ if __name__ == '__main__':
             else:
                 attitudes_count = ''
             mysql_connection.insert(mysql_weibodata,
-                                    pid=pid,
+                                    id=pid,
                                     created_at=created_at,
                                     text=text,
                                     uid=uid,
