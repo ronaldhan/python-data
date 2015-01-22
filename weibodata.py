@@ -17,8 +17,17 @@ if __name__ == '__main__':
     mongo_collections = mongo_db.collection_names()
     #list的remove方法没有返回值
     mongo_collections.remove('system.indexes')
-    datafile = open(data_path, 'rw')
-    userfile = open(user_path, 'rw')
+    datafile = open(data_path, 'w')
+    headline = 'id;created_at;text;uid;lng;lat;' \
+               'retweeted_status;reposts_count;comments_count;attitudes_count\n'
+    datafile.write(headline)
+    datafile.flush()
+    userfile = open(user_path, 'w')
+    headline = 'uid;province;city;location;gender;' \
+               'followers_count;friends_count;statuses_count;' \
+               'favourites_count;user_created_at; bi_followers_count\n'
+    userfile.write(headline)
+    userfile.flush()
     for collection in mongo_collections:
         user_collction = mongo_db[collection]
         total = user_collction.find().count()
@@ -130,19 +139,21 @@ if __name__ == '__main__':
             #             statuses_count, favourites_count, user_created_at, bi_followers_count)
             # mysql_cursor.execute(sql)
             # mysql_connection.commit()
-            data_line = '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (pid, created_at,
+            data_line = '%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n' % (pid, created_at,
                         text, uid, geo_lng, geo_lat, retweeted_status,
                         reposts_count, comments_count, attitudes_count)
-            user_line = '%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n' % (uid, province,
+            user_line = '%s;%s;%s;%s;%s;%s;%s;%s;%s;%s;%s\n' % (uid, province,
                         city, location, gender, followers_count, friends_count,
                         statuses_count, favourites_count, user_created_at, bi_followers_count)
-            datafile.writelines(data_line)
-            userfile.writelines(user_line)
+            datafile.write(data_line)
+            userfile.write(user_line)
             count += 1
             curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
             if count % 100 == 0:
                 print '%s----->%s/%s<------' % (curtime, str(count), str(total))
         curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        datafile.flush()
+        userfile.flush()
         print '%s----->%s dealed' % (curtime, collection)
     datafile.flush()
     datafile.close()
