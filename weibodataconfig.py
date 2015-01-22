@@ -4,6 +4,7 @@ mysql_host = "localhost"
 mysql_database = "weibo"
 mysql_user = "root"
 mysql_password = "ronald"
+mysql_port = 3306
 mysql_weibodata = 'sinaweibo'
 mysql_weibouser = 'weibouser'
 
