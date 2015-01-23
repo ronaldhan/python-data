@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
-import python_mysql as mydb
 import os
-import shapefile as shp
+import re
+import time
 from decimal import Decimal
+
+import shapefile as shp
+
+import python_mysql as mydb
+
+
 try:
     from StringIO import StringIO
 except ImportError:
@@ -28,40 +34,67 @@ if '__main__' == __name__:
     #连接数据库，找出表
     mysqlconn = mydb.Connection(host=mysql_host, database=mysql_database, user=mysql_user, password=mysql_password)
     fileName = os.path.join(fileFolder, tableName) + suffix
-    #print fileName
+
     #检测文件是否存在
     if os.path.exists(fileName):
         os.remove(fileName)
-    sql = u'select * from %s' % tableName
-    table = mysqlconn.query(sql)
 
+    #使用分页的形式查询处理
+    pcount = 1000
+    #计算页数
+    sql = 'select count(*) as count from %s' % tableName
+    ctable = mysqlconn.query(sql)
+    tcount = int(ctable[0]['count'])
+    pages = tcount / pcount
+
+    #创建shp文件结构
     w = shp.Writer(shp.POINT)
-    w.field('id', 'C', '8')
-    w.field('name', 'C', '100')
-    w.field('address', 'C', '100')
-    w.field('catalog', 'C', '10')
-    w.field('subcatalog', 'C', '20')
-    w.field('uid','C','50')
-    for row in table:
-        id = row['id']
-        name = row['name'].strip().decode('utf-8').encode('cp936')
-        address = row['address'].strip().decode('utf-8').encode('cp936')
-        catalog = row['catalog']
-        subcatalog = row['subcatalog'].decode('utf-8').encode('cp936')
-        uid = row['uid'].strip()
-        lng = Decimal(row['lng'].strip())
-        lat = Decimal(row['lat'].strip())
-        w.point(lng, lat)
-        w.record(id, name, address, catalog, subcatalog, uid)
-        print '%s dealed' % id
+    w.field('id', 'C', '20')
+    w.field('uid', 'C', '20')
+    w.field('created_at', 'C', '30')
+    w.field('reposts_count', 'C', '6')
+    w.field('comments_count', 'C', '6')
+    w.field('attitudes_count', 'C', '6')
+
+    #lng和lat字段可能出现脏数据，需要模式识别，字段只能是类似于xxx.xxxxx的形式，不能出现其他非数字字符
+    pattern = re.compile(r'\d+\.\d+$')
+
+    for i in range(pages + 1):
+        offset = i * pcount
+        sql = 'select id, created_at, uid, lng, lat, reposts_count, comments_count, attitudes_count' \
+              ' from %s limit %s,%s' % (tableName, str(offset), str(pcount))
+        ttable = mysqlconn.query(sql)
+        for row in ttable:
+            rid = row['id']
+            created_at = row['created_at']
+            uid = row['uid']
+            tlng = row['lng']
+            tlat = row['lat']
+            reposts_count = row['reposts_count']
+            comments_count = row['comments_count']
+            attitudes_count = row['attitudes_count']
+            match_lng = pattern.match(tlng)
+            if match_lng:
+                match_lat = pattern.match(tlat)
+                if match_lat:
+                    lng = Decimal(match_lng.group(0))
+                    lat = Decimal(match_lat.group(0))
+                    w.point(lng, lat)
+                    w.record(rid, uid, created_at, reposts_count, comments_count, attitudes_count)
+            else:
+                continue
+            curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+            print '------%s / %s------%s' % (i, pages, curtime)
+    curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+    print 'all record dealed, creating shp file...%s' % curtime
     shape = StringIO()
     shx = StringIO()
     dbf = StringIO()
-    #w.save(os.path.join(fileFolder, tableName), shape, shx, dbf)
     w.saveDbf(os.path.join(fileFolder, tableName))
     w.saveShp(os.path.join(fileFolder, tableName))
     w.saveShx(os.path.join(fileFolder, tableName))
-    print '%s had created' % fileName
+    curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+    print '%s had created----%s ' % (fileName, curtime)
 
 
 
