@@ -73,14 +73,19 @@ if '__main__' == __name__:
             reposts_count = row['reposts_count']
             comments_count = row['comments_count']
             attitudes_count = row['attitudes_count']
-            match_lng = pattern.match(tlng)
-            if match_lng:
-                match_lat = pattern.match(tlat)
-                if match_lat:
-                    lng = Decimal(match_lng.group(0))
-                    lat = Decimal(match_lat.group(0))
-                    w.point(lng, lat)
-                    w.record(rid, uid, created_at, reposts_count, comments_count, attitudes_count)
+            #需要判断lng和lat字段是否为空
+            if tlng:
+                if tlat:
+                    match_lng = pattern.match(tlng)
+                    if match_lng:
+                        match_lat = pattern.match(tlat)
+                        if match_lat:
+                            lng = Decimal(match_lng.group(0))
+                            lat = Decimal(match_lat.group(0))
+                            w.point(lng, lat)
+                            w.record(rid, uid, created_at, reposts_count, comments_count, attitudes_count)
+                    else:
+                        continue
             else:
                 continue
             curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
