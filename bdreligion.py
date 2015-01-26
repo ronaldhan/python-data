@@ -16,8 +16,8 @@ parts = raw_input("输入分区模式:\n")
 # todo 对输入的模式通过正则表达式进行判断，满足'整数*整数'的模式
 if '*' in parts:
     part = parts.split('*')
-    XP = part[0]
-    YP = part[1]
+    XP = int(part[0])
+    YP = int(part[1])
 else:
     print '输入模式有误'
 clist = coors.split(';')
