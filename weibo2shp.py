@@ -88,8 +88,8 @@ if '__main__' == __name__:
                         continue
             else:
                 continue
-            curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
-            print '------%s / %s------%s' % (i, pages, curtime)
+        curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        print '------%s / %s------%s' % (i, pages, curtime)
     curtime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
     print 'all record dealed, creating shp file...%s' % curtime
     shape = StringIO()
